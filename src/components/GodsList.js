@@ -1,61 +1,35 @@
-import React from "react"
-import { connect } from "react-redux"
-import { addGod } from "../actions"
+import React from "react";
+import { connect } from "react-redux";
+import { deleteGod } from "../actions";
 
-class GodsList extends React.Component{
-  state = {
-    name: "",
-    power: "",
-    redux: ""
-  }
+class GodsList extends React.Component {
+  handleDelete = god => {
+    console.log("beef", god);
+    this.props.deleteGod(god);
+  };
 
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
-  }
-
-  // addGod2 = (god) => {
-  //   dispatch(addGod(god))
-  // }
-
-  handleSubmit = (e) => {
-    console.log("submitting god,", this.state)
-    e.preventDefault()
-    this.props.addGod(this.state)
-  }
-
-  render(){
-    console.log(this.props)
-    return(
+  render() {
+    console.log(this.props);
+    return (
       <div>
         God List!
-        <form onSubmit={this.handleSubmit} >
+        {this.props.greekGods.map(god =>
           <div>
-            <label>Name</label>
-            <input type="text" name="name" onChange={this.handleChange}/>
+            {god.name}
+            <button onClick={() => this.handleDelete(god)}>Delete Me</button>
           </div>
-          <div>
-            <label>Power</label>
-            <input type="text" name="power" onChange={this.handleChange}/>
-          </div>
-          <div>
-            <label>Redux</label>
-            <input type="text" name="redux" onChange={this.handleChange}/>
-          </div>
-          <input type="submit"/>
-        </form>
-        {this.props.greekGods.map( god => <div>{god.name}</div>)}
+        )}
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+  console.log("STATE", state);
   return {
-    greekGods: state.greekGods
-  }
-}
+    greekGods: state.gods.greekGods
+  };
+};
 // Not necessary when you pass { addGod } in place of mapDispatchToProps:
 // const mapDispatchToProps = dispatch => {
 //   return {
@@ -63,4 +37,4 @@ const mapStateToProps = (state) => {
 //   }
 // }
 
-export default connect(mapStateToProps, {addGod})(GodsList)
+export default connect(mapStateToProps, { deleteGod })(GodsList);
